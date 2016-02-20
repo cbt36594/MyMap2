@@ -58,7 +58,7 @@ public class MapFragmentA extends Fragment implements OnMapReadyCallback {
         markerOpt.visible(true);// Visible：是否顯示標記，true 顯示；false隱藏。
         markerOpt.anchor(0.5f, 0.5f);//設為圖片中心 Anchor：圖片上的一個點，用來定位到經緯度座標，預設為圖片的中間下緣。值為左上角(0.0, 0.0)到右下角(1.0, 1.0)。
         markerOpt.icon(BitmapDescriptorFactory
-                .fromResource(android.R.drawable.ic_menu_mylocation));// Icon：圖示，被放置在原標記的相同位置，只有第一次建立標記時可以使用圖示，之後就不能任意更換圖示。
+                .fromResource(R.mipmap.flag));// Icon：圖示，被放置在原標記的相同位置，只有第一次建立標記時可以使用圖示，之後就不能任意更換圖示。
 
         mMap.addMarker(markerOpt);
 
