@@ -3,13 +3,13 @@ package com.tab.tw.mymap2;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -20,7 +20,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapFragmentA extends Fragment implements OnMapReadyCallback {
 
     private  View rootView;
-    private MapView mapView;
     private GoogleMap mMap;
 
     @Override
@@ -28,17 +27,27 @@ public class MapFragmentA extends Fragment implements OnMapReadyCallback {
                              Bundle savedInstanceState) {
         try {
             rootView = inflater.inflate(R.layout.main_map, container, false);
+
             SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                     .findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
-
+//            initToolbar();
         }
         catch (InflateException e){
             e.printStackTrace();
         }
+
         return rootView;
     }
 
+//    private void initToolbar() {
+//        tool = (Toolbar) fg.findViewById(R.id.toolbar);
+//
+//        tool.setLogo(R.mipmap.flag);
+//        tool.setTitle("Google");
+//        tool.inflateMenu(R.menu.menu_main);
+//
+//    }
 
 
     @Override
@@ -58,7 +67,7 @@ public class MapFragmentA extends Fragment implements OnMapReadyCallback {
         markerOpt.visible(true);// Visible：是否顯示標記，true 顯示；false隱藏。
         markerOpt.anchor(0.5f, 0.5f);//設為圖片中心 Anchor：圖片上的一個點，用來定位到經緯度座標，預設為圖片的中間下緣。值為左上角(0.0, 0.0)到右下角(1.0, 1.0)。
         markerOpt.icon(BitmapDescriptorFactory
-                .fromResource(R.mipmap.flag));// Icon：圖示，被放置在原標記的相同位置，只有第一次建立標記時可以使用圖示，之後就不能任意更換圖示。
+                .fromResource(R.mipmap.flag_icon96));// Icon：圖示，被放置在原標記的相同位置，只有第一次建立標記時可以使用圖示，之後就不能任意更換圖示。
 
         mMap.addMarker(markerOpt);
 
@@ -68,7 +77,7 @@ public class MapFragmentA extends Fragment implements OnMapReadyCallback {
         markerOpt2.draggable(false);
         markerOpt2.visible(true);
         markerOpt2.anchor(0.5f, 0.5f);
-        markerOpt2.icon(BitmapDescriptorFactory.fromResource(R.mipmap.flag));
+        markerOpt2.icon(BitmapDescriptorFactory.fromResource(R.mipmap.lesson1_item));
 
         mMap.addMarker(markerOpt2);
 
@@ -81,4 +90,7 @@ public class MapFragmentA extends Fragment implements OnMapReadyCallback {
         mMap.addMarker(markerOpt3);
 
     }
+
+
+
 }

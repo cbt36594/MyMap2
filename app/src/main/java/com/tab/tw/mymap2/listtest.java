@@ -26,14 +26,14 @@ public class listtest extends Fragment {
         value = mapsActivity.getFacebookData();
     }
 
-    @Override
+    @Override//取得畫面
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d("=====>", "FacebookFragment onCreateView");
         return inflater.inflate(R.layout.listtest, container, false);
     }
 
-    @Override
+    @Override//當畫面取得後執行方法
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.d("=====>", "FacebookFragment onActivityCreated");
