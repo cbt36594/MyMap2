@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/username_txt"
+        android:hint="Enter Name"
+        android:focusable="true" />
+    <!--hint:提示用-->
+
+    <!--登入用的密碼,請留意 inputType-->
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:id="@+id/password_txt"
+        android:hint="Password" />
+
+    <!--用來放 2 個 button 用的水平 linearlayout-->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <!--執行登入用的 button-->
+        <!--layout_weight 影響 2 個 button 的比例-->
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="LOGIN"
+            android:id="@+id/login_button"
+            android:layout_weight="1" />
+
+        <!--執行登出用的 button-->
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CANCEL"
+            android:id="@+id/cancle_button"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <!--API15 以上才 support-->
+    <!--<Space-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_weight="0.21" />-->
+
+    <!--輸入要傳送出去的資料-->
+    <EditText
+        android:id="@+id/senddata_txt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10" />
+    <!--請查一下，id，ems 分別是做麼的-->
+
+    <!--傳送資料用的按鈕-->
+    <Button
+        android:id="@+id/send_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Send Data"
+        android:onClick="on_send_click"/>
+    <!--android:text 可以用多國語言用的方式處理。-->
+    <!--onClick 需要在java程式中有對應的函式 on_send_click-->
+
+    <!--修改成要顯示收到的資料-->
+    <TextView
+        android:id="@+id/show_text"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent" />
+
+</LinearLayout>

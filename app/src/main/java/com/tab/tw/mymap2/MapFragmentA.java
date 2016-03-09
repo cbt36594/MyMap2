@@ -40,14 +40,6 @@ public class MapFragmentA extends Fragment implements OnMapReadyCallback {
         return rootView;
     }
 
-//    private void initToolbar() {
-//        tool = (Toolbar) fg.findViewById(R.id.toolbar);
-//
-//        tool.setLogo(R.mipmap.flag);
-//        tool.setTitle("Google");
-//        tool.inflateMenu(R.menu.menu_main);
-//
-//    }
 
 
     @Override
@@ -77,7 +69,7 @@ public class MapFragmentA extends Fragment implements OnMapReadyCallback {
         markerOpt2.draggable(false);
         markerOpt2.visible(true);
         markerOpt2.anchor(0.5f, 0.5f);
-        markerOpt2.icon(BitmapDescriptorFactory.fromResource(R.mipmap.lesson1_item));
+        markerOpt2.icon(BitmapDescriptorFactory.fromResource(R.mipmap.flag));
 
         mMap.addMarker(markerOpt2);
 

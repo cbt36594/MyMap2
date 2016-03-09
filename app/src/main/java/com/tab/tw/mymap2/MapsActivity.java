@@ -8,14 +8,39 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class MapsActivity extends FragmentActivity {
 
     private TabLayout tabLayout;
+    Button login_button, cancle_button;
+    EditText username_editText, password_editText;
+
+    RequestQueue queue;//隊列改宣告在這，因為整個頁面只需要一個隊列，但請在頁面建立後再實體化
+    String API_TOKEN;
+    TabFragment4 f4;
+    TextView tv;
+
+
+
 //    private View mToolbarView;
 //    private FragmentTabHost tabHost;
     private Toolbar toolbar;
@@ -23,14 +48,13 @@ public class MapsActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-//        mToolbarView = findViewById(R.id.toolbar);
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.addTab(tabLayout.newTab().setText("Map"));
-        tabLayout.addTab(tabLayout.newTab().setText("Google"));
-        tabLayout.addTab(tabLayout.newTab().setText("FaceBook"));
-        tabLayout.addTab(tabLayout.newTab().setText("Apple"));
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        username_editText = (EditText) findViewById(R.id.username_txt);//找到頁面上的元件，然後指派
+//        password_editText = (EditText) findViewById(R.id.password_txt);
+//
+//        login_button = (Button) findViewById(R.id.login_button);
+//        cancle_button = (Button) findViewById(R.id.cancle_button);
+//        tv = (TextView) findViewById(R.id.show_text);//找到我們要拿來顯示資料的 UI 元件
+        TabLayout();
         initToolbar();
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -54,6 +78,8 @@ public class MapsActivity extends FragmentActivity {
 
             }
         });
+//        TestConnect();
+
 
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //// App Logo
@@ -110,6 +136,68 @@ public class MapsActivity extends FragmentActivity {
 //                listtest.class,
 //                null);
     }
+
+//    public void on_send_click(View v)//按鈕對應對的函式
+//    {
+//
+//        f4.on_send_click(v);
+//
+//    }
+    public void TestConnect(){
+
+
+
+        login_button.setOnClickListener( new View.OnClickListener(){//監聽這個按鈕是否 click
+            @Override
+            public void onClick(View view){
+                Toast.makeText(getApplicationContext(), "login function", Toast.LENGTH_SHORT).show();//顯示 toast 表示按鈕可以執行
+                String username = username_editText.getText().toString();//取得使用者名稱，密碼
+                String password = password_editText.getText().toString();
+
+                String url = "http://192.168.1.103:8000/API/login/" + username + "/" + password;//按後端的設計來登入
+//                String url = "http://tw.yahoo.com/";
+                getRequestQueue();//呼叫隊列用的函式
+
+                //2) 定義要放到隊列中執行用的 StringRequest
+                StringRequest stringRequest = new StringRequest(//需要 4 個參數
+                        Request.Method.GET,//定義請求的方式
+                        url,//執行請求用的網址
+                        new Response.Listener<String>(){//處理回應的字串用的匿名函式
+                            @Override
+                            public void onResponse(String response){//改寫處理的函式
+                                tv.setText(response);//因為會用到外部的參數 tv，所以外部的參數 tv 要宣告成 final
+
+                                try {
+                                    JSONObject jsonRootObject = new JSONObject(response);
+                                    API_TOKEN = jsonRootObject.getString("token").toString();
+                                }
+                                catch(JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        },
+                        new Response.ErrorListener(){//處理錯誤回應用的匿名函式
+                            @Override
+                            public void onErrorResponse(VolleyError error){//改寫處理的函式
+                                tv.setText("回傳錯誤");
+                            }
+                        }
+                );
+
+                //3) 把要執行的 StringRequest 加到隊列中執行
+                queue.add(stringRequest);
+            }
+        });
+
+    }
+    public RequestQueue getRequestQueue(){//檢查隊列是否已經初始化，若沒有就初始化
+        if(queue == null){
+            queue = Volley.newRequestQueue(getApplicationContext());
+        }
+        return queue;
+    }
+
+
     public class PagerAdapter extends FragmentStatePagerAdapter {
         int PAGER_COUNT;
         public PagerAdapter(FragmentManager fm,int PAGER_COUNT)
@@ -131,8 +219,8 @@ public class MapsActivity extends FragmentActivity {
                     TabFragment3 facebook=new TabFragment3();
                     return facebook;
                 case 3:
-                    TabFragment4 apple=new TabFragment4();
-                    return apple;
+                    TabFragment4 login=new TabFragment4();
+                    return login;
             }
             return null;
         }
@@ -170,11 +258,11 @@ public class MapsActivity extends FragmentActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.inflateMenu(R.menu.menu_main);//建構一個menu使toolbar成為Activity控件
-        toolbar.setLogo(R.mipmap.mario_icon) ;
+        toolbar.setLogo(R.mipmap.mario_icon48) ;
         toolbar.setTitle(R.string.title_activity_maps);
-        toolbar.setSubtitle("Sub title");
+//        toolbar.setSubtitle("Sub title");
 
-        toolbar.setNavigationIcon(R.mipmap.ic_launcher);
+//        toolbar.setNavigationIcon(R.mipmap.ic_launcher);
 //        onTabChanged(getString(R.string.tab_name_facebook));
 //        final int size = tabs3.length;
 //        switch (size){
@@ -223,16 +311,21 @@ public class MapsActivity extends FragmentActivity {
         });
         return toolbar;
     }
-//@Override
-//public boolean onCreateOptionsMenu(Menu menu) {
-//    getMenuInflater().inflate(R.menu.menu_main, menu);
-//return true;
-//}
+    public void TabLayout(){
+
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.addTab(tabLayout.newTab().setText("Map"));
+        tabLayout.addTab(tabLayout.newTab().setText("任務清單"));
+        tabLayout.addTab(tabLayout.newTab().setText("管理員"));
+        tabLayout.addTab(tabLayout.newTab().setText("登入"));
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+    }
     public String getFacebookData() {
 
 
 
-        return "恭喜完成第一畫面";
+        return "FaceBook";
     }
 
 }

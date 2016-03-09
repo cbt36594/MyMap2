@@ -45,7 +45,11 @@
             android:layout_below="@id/tabs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center">
+        <include
+
+            layout="@layout/main_map" />
+    </android.support.v4.view.ViewPager>
     </FrameLayout>
 </LinearLayout>
 <!--</android.support.v4.app.FragmentTabHost>-->
