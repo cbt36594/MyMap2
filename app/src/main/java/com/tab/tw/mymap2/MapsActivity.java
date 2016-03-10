@@ -12,32 +12,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 
 public class MapsActivity extends FragmentActivity {
 
     private TabLayout tabLayout;
-    Button login_button, cancle_button;
-    EditText username_editText, password_editText;
 
-    RequestQueue queue;//隊列改宣告在這，因為整個頁面只需要一個隊列，但請在頁面建立後再實體化
-    String API_TOKEN;
+
+
+
     TabFragment4 f4;
-    TextView tv;
+
 
 
 
@@ -48,12 +34,7 @@ public class MapsActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-//        username_editText = (EditText) findViewById(R.id.username_txt);//找到頁面上的元件，然後指派
-//        password_editText = (EditText) findViewById(R.id.password_txt);
-//
-//        login_button = (Button) findViewById(R.id.login_button);
-//        cancle_button = (Button) findViewById(R.id.cancle_button);
-//        tv = (TextView) findViewById(R.id.show_text);//找到我們要拿來顯示資料的 UI 元件
+
         TabLayout();
         initToolbar();
 
@@ -61,6 +42,7 @@ public class MapsActivity extends FragmentActivity {
         final PagerAdapter adapter = new PagerAdapter
                 (getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(5);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -78,7 +60,7 @@ public class MapsActivity extends FragmentActivity {
 
             }
         });
-//        TestConnect();
+
 
 
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -143,59 +125,6 @@ public class MapsActivity extends FragmentActivity {
 //        f4.on_send_click(v);
 //
 //    }
-    public void TestConnect(){
-
-
-
-        login_button.setOnClickListener( new View.OnClickListener(){//監聽這個按鈕是否 click
-            @Override
-            public void onClick(View view){
-                Toast.makeText(getApplicationContext(), "login function", Toast.LENGTH_SHORT).show();//顯示 toast 表示按鈕可以執行
-                String username = username_editText.getText().toString();//取得使用者名稱，密碼
-                String password = password_editText.getText().toString();
-
-                String url = "http://192.168.1.103:8000/API/login/" + username + "/" + password;//按後端的設計來登入
-//                String url = "http://tw.yahoo.com/";
-                getRequestQueue();//呼叫隊列用的函式
-
-                //2) 定義要放到隊列中執行用的 StringRequest
-                StringRequest stringRequest = new StringRequest(//需要 4 個參數
-                        Request.Method.GET,//定義請求的方式
-                        url,//執行請求用的網址
-                        new Response.Listener<String>(){//處理回應的字串用的匿名函式
-                            @Override
-                            public void onResponse(String response){//改寫處理的函式
-                                tv.setText(response);//因為會用到外部的參數 tv，所以外部的參數 tv 要宣告成 final
-
-                                try {
-                                    JSONObject jsonRootObject = new JSONObject(response);
-                                    API_TOKEN = jsonRootObject.getString("token").toString();
-                                }
-                                catch(JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        },
-                        new Response.ErrorListener(){//處理錯誤回應用的匿名函式
-                            @Override
-                            public void onErrorResponse(VolleyError error){//改寫處理的函式
-                                tv.setText("回傳錯誤");
-                            }
-                        }
-                );
-
-                //3) 把要執行的 StringRequest 加到隊列中執行
-                queue.add(stringRequest);
-            }
-        });
-
-    }
-    public RequestQueue getRequestQueue(){//檢查隊列是否已經初始化，若沒有就初始化
-        if(queue == null){
-            queue = Volley.newRequestQueue(getApplicationContext());
-        }
-        return queue;
-    }
 
 
     public class PagerAdapter extends FragmentStatePagerAdapter {
@@ -258,7 +187,7 @@ public class MapsActivity extends FragmentActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.inflateMenu(R.menu.menu_main);//建構一個menu使toolbar成為Activity控件
-        toolbar.setLogo(R.mipmap.mario_icon48) ;
+//        toolbar.setLogo(R.mipmap.flag_icon96) ;
         toolbar.setTitle(R.string.title_activity_maps);
 //        toolbar.setSubtitle("Sub title");
 
@@ -315,7 +244,7 @@ public class MapsActivity extends FragmentActivity {
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.addTab(tabLayout.newTab().setText("Map"));
-        tabLayout.addTab(tabLayout.newTab().setText("任務清單"));
+        tabLayout.addTab(tabLayout.newTab().setText("我的最愛"));
         tabLayout.addTab(tabLayout.newTab().setText("管理員"));
         tabLayout.addTab(tabLayout.newTab().setText("登入"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);

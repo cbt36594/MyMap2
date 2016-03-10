@@ -21,7 +21,7 @@ public class listtest extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        Log.d("=====>", "FacebookFragment onAttach");
+
         MapsActivity mapsActivity = (MapsActivity)context;
         value = mapsActivity.getFacebookData();
     }
@@ -29,14 +29,14 @@ public class listtest extends Fragment {
     @Override//取得畫面
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d("=====>", "FacebookFragment onCreateView");
+
         return inflater.inflate(R.layout.listtest, container, false);
     }
 
     @Override//當畫面取得後執行方法
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.d("=====>", "FacebookFragment onActivityCreated");
+
         TextView txtResult = (TextView) this.getView().findViewById(R.id.textView);
         txtResult.setText(value);
     }
