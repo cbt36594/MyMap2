@@ -7,9 +7,9 @@ import com.tab.tw.mymap2.listtest;
 public enum MainTab {
 
     MAP(0, R.string.tab_name_map, MapFragmentA.class),
-    GOOGLE(1,R.string.tab_name_google,listtest.class),
-    FACEBOOK(2,R.string.tab_name_facebook,listtest.class),
-    APPLE(3,R.string.tab_name_apple,listtest.class);
+    GOOGLE(1,R.string.tab_name_favor,listtest.class),
+    FACEBOOK(2,R.string.tab_name_manerger,listtest.class),
+    APPLE(3,R.string.tab_name_login,listtest.class);
 
     private int idx;
     private int resName;

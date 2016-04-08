@@ -18,6 +18,7 @@
 
     <!--blue-->
     <color name="md_blue_50">#E3F2FD</color>
+    <color name="md_blue_80">#cdf2ed</color>
     <color name="md_blue_100">#BBDEFB</color>
     <color name="md_blue_200">#90CAF9</color>
     <color name="md_blue_300">#64B5F6</color>
@@ -31,6 +32,8 @@
     <color name="md_blue_A200">#448AFF</color>
     <color name="md_blue_A400">#2979FF</color>
     <color name="md_blue_A700">#2962FF</color>
-    <color name="md_dark_100">#FF404443</color>FF404443
+
+    <color name="md_dark_100">#FF404443</color>
+    <color name="md_dark_200">#FF2D1901</color>
 
 </resources>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:id="@+id/imgLogo"
+        android:scaleType="fitCenter"
+        android:layout_alignParentTop="true"
+        android:layout_weight="0.1" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.9"
+        android:layout_marginLeft="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/txtName"
+            android:layout_above="@+id/txtengName"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:singleLine="true"
+            android:maxLength="10"
+            android:ellipsize="end"
+            android:textColor="#371903" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/txtengName"
+            android:layout_alignBottom="@+id/imgLogo"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:singleLine="true"
+            android:textColor="#662e04" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/creat_time"
+        android:layout_gravity="right"
+        android:textColor="#813b07" />
+
+</LinearLayout>
+
+

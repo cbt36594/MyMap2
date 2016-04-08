@@ -7,7 +7,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/username_txt"
         android:hint="Enter Name"
-        android:focusable="true" />
+        android:focusable="true"
+        android:textColorHint="#6e413333"
+        android:textColor="#000000"
+        android:singleLine="true"
+        android:inputType="textEmailAddress" />
     <!--hint:提示用-->
 
     <!--登入用的密碼,請留意 inputType-->
@@ -16,7 +20,10 @@
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:id="@+id/password_txt"
-        android:hint="Password" />
+        android:hint="Password"
+        android:textColorHint="#6e413333"
+        android:textColor="#000000"
+        android:singleLine="true" />
 
     <!--用來放 2 個 button 用的水平 linearlayout-->
     <LinearLayout
@@ -54,7 +61,8 @@
         android:id="@+id/senddata_txt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10" />
+        android:ems="10"
+        android:textColor="#000000" />
     <!--請查一下，id，ems 分別是做麼的-->
 
     <!--傳送資料用的按鈕-->
@@ -68,9 +76,17 @@
     <!--onClick 需要在java程式中有對應的函式 on_send_click-->
 
     <!--修改成要顯示收到的資料-->
-    <TextView
-        android:id="@+id/show_text"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="fill_parent" />
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView"
+        android:layout_gravity="center_horizontal" >
+
+        <TextView
+            android:id="@+id/show_text"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:textColor="#000000" />
+    </ScrollView>
 
 </LinearLayout>

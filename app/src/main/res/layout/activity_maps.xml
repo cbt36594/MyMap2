@@ -11,7 +11,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/kamio_haruko">
+    android:background="@drawable/background_04">
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/md_dark_100"/>
+        android:background="@color/md_blue_500"/>
         <!--app:tabMode="scrollable" -設定滑動Tab-->
 
 

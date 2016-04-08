@@ -1,35 +1,44 @@
 package com.tab.tw.mymap2;
 
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.google.android.gms.maps.GoogleMap;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 
 public class MapsActivity extends FragmentActivity {
 
     private TabLayout tabLayout;
+    GoogleMap mGoogleMap;
 
 
-
-
-    TabFragment4 f4;
-
-
-
-
-//    private View mToolbarView;
+    //    private View mToolbarView;
 //    private FragmentTabHost tabHost;
     private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +51,7 @@ public class MapsActivity extends FragmentActivity {
         final PagerAdapter adapter = new PagerAdapter
                 (getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(5);
+        viewPager.setOffscreenPageLimit(3);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -61,6 +70,14 @@ public class MapsActivity extends FragmentActivity {
             }
         });
 
+
+        //檢查網路連線true=連線成功~方法在最後
+        if (checkInternetConnection()) {
+
+            Toast.makeText(this,"連線成功",Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(this,"請確認網路連線..",Toast.LENGTH_SHORT).show();
+        }
 
 
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -94,30 +111,8 @@ public class MapsActivity extends FragmentActivity {
 //            }
 //        });
 
-//   888     tabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
-//        tabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
-//        initTabs();
-        //1
-//        tabHost.addTab(tabHost.newTabSpec("Map")
-//                        .setIndicator("Map"),
-//                MapFragmentA.class,
-//                null);
-//        //2
-//        tabHost.addTab(tabHost.newTabSpec("Google")
-//                        .setIndicator("Google"),
-//                listtest.class,
-//                null);
-//        //3
-//        tabHost.addTab(tabHost.newTabSpec("Facebook")
-//                        .setIndicator("Facebook"),
-//                listtest.class,
-//                null);
-//        //4
-//        tabHost.addTab(tabHost.newTabSpec("Twitter")
-//                        .setIndicator("Twitter"),
-//                listtest.class,
-//                null);
     }
+
 
 //    public void on_send_click(View v)//按鈕對應對的函式
 //    {
@@ -127,38 +122,42 @@ public class MapsActivity extends FragmentActivity {
 //    }
 
 
-    public class PagerAdapter extends FragmentStatePagerAdapter {
+    public class PagerAdapter extends FragmentPagerAdapter {
         int PAGER_COUNT;
-        public PagerAdapter(FragmentManager fm,int PAGER_COUNT)
-        {
-            super(fm);
-            this.PAGER_COUNT=PAGER_COUNT;
+        FragmentManager mFragmentManager;
+        Map<Integer, String> mFragmentTags;
+
+        public PagerAdapter(FragmentManager mFragmentManager, int PAGER_COUNT) {
+            super(mFragmentManager);
+            this.PAGER_COUNT = PAGER_COUNT;
         }
+
         @Override
         public Fragment getItem(int position) {
-            switch(position)
-            {
+            switch (position) {
                 case 0:
-                    MapFragmentA Map=new MapFragmentA();
+                    MapFragmentA Map = new MapFragmentA();
                     return Map;
                 case 1:
-                    listtest google=new listtest();
+                    listtest google = new listtest();
                     return google;
                 case 2:
-                    TabFragment3 facebook=new TabFragment3();
+                    TabFragment3 facebook = new TabFragment3();
                     return facebook;
                 case 3:
-                    TabFragment4 login=new TabFragment4();
+                    TabFragment4 login = new TabFragment4();
                     return login;
             }
             return null;
         }
+
 
         @Override
         public int getCount() {
             return PAGER_COUNT;
         }
     }
+
 // 888   public void initTabs() {
 //
 //        MainTab[] tabs2 = MainTab.values();//取得MainTab.class的enum常數參數
@@ -172,7 +171,7 @@ public class MapsActivity extends FragmentActivity {
 //            tabHost.addTab(tab, mainTab.getClz(), null);//新增tab指定class頁面
 //        }
 
-//   888 }
+    //   888 }
 //    @Override
 //    public void onTabChanged(String tabId) {
 //
@@ -182,7 +181,7 @@ public class MapsActivity extends FragmentActivity {
 ////        }
 //
 //    }
-    public Toolbar initToolbar(){
+    public Toolbar initToolbar() {
 
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -231,8 +230,12 @@ public class MapsActivity extends FragmentActivity {
                 String msg = "Setting";
                 switch (item.getItemId()) {
                     case R.id.action_settings:
+
                         break;
                     case R.id.main_menu_search:
+                        Intent search = new Intent();
+                        search.setClass(getApplication(),SearchBar.class);
+                        startActivity(search);
                         break;
                 }
                 return true;
@@ -240,21 +243,29 @@ public class MapsActivity extends FragmentActivity {
         });
         return toolbar;
     }
-    public void TabLayout(){
+
+    public void TabLayout() {
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.addTab(tabLayout.newTab().setText("Map"));
-        tabLayout.addTab(tabLayout.newTab().setText("我的最愛"));
-        tabLayout.addTab(tabLayout.newTab().setText("管理員"));
-        tabLayout.addTab(tabLayout.newTab().setText("登入"));
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.mipmap.sale48));
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.sushi05));
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.sushi17));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_name_login));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
     }
-    public String getFacebookData() {
 
 
 
-        return "FaceBook";
+    public boolean checkInternetConnection() {
+        ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo ni = cm.getActiveNetworkInfo();
+        if (ni != null && ni.isConnected()) {
+
+            return ni.isConnected();
+        } else {
+        System.out.println("ni.isConnected() = "+ni.isConnected());
+            return false;
+        }
     }
-
 }
