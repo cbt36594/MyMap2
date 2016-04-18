@@ -6,12 +6,29 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context="com.tab.tw.mymap2.MapsActivity">
+    <android.support.v4.widget.DrawerLayout
 
+        android:id="@+id/drawer_layout2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+        <RelativeLayout
+            android:layout_width="240dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:choiceMode="singleChoice"
+            >
+            <!-- The navigation drawer -->
+            <ListView android:id="@+id/main_left_drawer"
+                android:layout_width="240dp"
+                android:layout_height="match_parent"
+                android:background="#2196F3"/>
+        </RelativeLayout>
 <LinearLayout
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_04">
+    android:background="@drawable/back_image3">
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,6 +47,7 @@
 
 
     </android.support.design.widget.AppBarLayout>
+
     <FrameLayout
         android:id="@+id/realtabcontent"
         android:layout_below="@id/tabs"
@@ -47,7 +65,12 @@
         <include
 
             layout="@layout/main_map" />
+
     </android.support.v4.view.ViewPager>
+
     </FrameLayout>
+
 </LinearLayout>
+
+    </android.support.v4.widget.DrawerLayout>
 </android.support.design.widget.CoordinatorLayout>

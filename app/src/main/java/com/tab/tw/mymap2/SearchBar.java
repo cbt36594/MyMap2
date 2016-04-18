@@ -1,8 +1,10 @@
 package com.tab.tw.mymap2;
 
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
@@ -14,6 +16,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.LruCache;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -40,6 +43,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -73,6 +78,7 @@ public class SearchBar extends AppCompatActivity implements SearchView.OnQueryTe
     private List<String> start_time;
     private List<String> end_time;
     private List<String> created;
+    private List<String> image2;
 
     private List<Integer> image;
 
@@ -98,6 +104,8 @@ public class SearchBar extends AppCompatActivity implements SearchView.OnQueryTe
         end_time = new ArrayList<String>();
         created = new ArrayList<String>();
         image= new ArrayList<Integer>();
+        image2 = new ArrayList<String>();
+        getImage();
         image.add(R.drawable.secen01);
         image.add(R.drawable.secen02);
         image.add(R.drawable.secen03);
@@ -117,6 +125,42 @@ public class SearchBar extends AppCompatActivity implements SearchView.OnQueryTe
 
 //        listView.setTextFilterEnabled(true);
 
+    }
+    private void getImage(){
+        image2.add("http://192.168.1.109:8000/img/01.jpg");
+        image2.add("http://192.168.1.109:8000/img/02.jpg");
+        image2.add("http://192.168.1.109:8000/img/03.jpg");
+        image2.add("http://192.168.1.109:8000/img/04.jpg");
+        image2.add("http://192.168.1.109:8000/img/05.jpg");
+        image2.add("http://192.168.1.109:8000/img/06.jpg");
+        image2.add("http://192.168.1.109:8000/img/07.jpg");
+        image2.add("http://192.168.1.109:8000/img/08.jpg");
+        image2.add("http://192.168.1.109:8000/img/09.jpg");
+        image2.add("http://192.168.1.109:8000/img/10.jpg");
+        image2.add("http://192.168.1.109:8000/img/11.jpg");
+        image2.add("http://192.168.1.109:8000/img/12.jpg");
+        image2.add("http://192.168.1.109:8000/img/13.jpg");
+        image2.add("http://192.168.1.109:8000/img/14.jpg");
+        image2.add("http://192.168.1.109:8000/img/15.jpg");
+        image2.add("http://192.168.1.109:8000/img/16.jpg");
+        image2.add("http://192.168.1.109:8000/img/17.jpg");
+        image2.add("http://192.168.1.109:8000/img/18.jpg");
+        image2.add("http://192.168.1.109:8000/img/19.jpg");
+        image2.add("http://192.168.1.109:8000/img/20.jpg");
+        image2.add("http://192.168.1.109:8000/img/21.jpg");
+        image2.add("http://192.168.1.109:8000/img/22.jpg");
+        image2.add("http://192.168.1.109:8000/img/23.jpg");
+        image2.add("http://192.168.1.109:8000/img/24.jpg");
+        image2.add("http://192.168.1.109:8000/img/25.jpg");
+        image2.add("http://192.168.1.109:8000/img/26.jpg");
+        image2.add("http://192.168.1.109:8000/img/27.jpg");
+        image2.add("http://192.168.1.109:8000/img/28.jpg");
+        image2.add("http://192.168.1.109:8000/img/29.jpg");
+        image2.add("http://192.168.1.109:8000/img/30.jpg");
+        image2.add("http://192.168.1.109:8000/img/31.jpg");
+        image2.add("http://192.168.1.109:8000/img/32.jpg");
+        image2.add("http://192.168.1.109:8000/img/33.jpg");
+        image2.add("http://192.168.1.109:8000/img/34.jpg");
     }
     private void initView() {
 //    laySwipe = (SwipeRefreshLayout) findViewById(R.id.laySwipe);
@@ -142,11 +186,11 @@ public class SearchBar extends AppCompatActivity implements SearchView.OnQueryTe
                 return true;
             }
         });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);//顯示返回圖示
+        getSupportActionBar().setHomeButtonEnabled(true);//返回圖示是否可點擊
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);//使用自訂View顯示在title欄
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mActionBarDrawerToggle = new ActionBarDrawerToggle(SearchBar.this, mDrawerLayout, toolbar2, R.string.open, R.string.close) {
             @Override
@@ -162,33 +206,9 @@ public class SearchBar extends AppCompatActivity implements SearchView.OnQueryTe
         mActionBarDrawerToggle.syncState();
         mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
 
-//        LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        View mTitleView = mInflater.inflate(R.layout.search_view,
-//                null);
-//        getActionBar().setCustomView(
-//                mTitleView,
-//                new ActionBar.LayoutParams(LayoutParams.MATCH_PARENT,
-//                        LayoutParams.WRAP_CONTENT));
-//        searchView = (SearchView) mTitleView.findViewById(R.id.search_view);
     }
 
-    public Object[] loadData() {
-//        mAllList.add("aa");
-//        mAllList.add("ddfa");
-//        mAllList.add("qw");
-//        mAllList.add("sd");
-//        mAllList.add("fd");
-//        mAllList.add("cf");
-//        mAllList.add("re");
-//        mAllList.add("張三");
-//        mAllList.add("李四");
-//        mAllList.add("我是誰");
-//        mAllList.add("我是你老師");
-//        mAllList.add("台北101");
-//        mAllList.add("台北西門町");
 
-        return listarray.toArray();
-    }
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -222,41 +242,26 @@ public class SearchBar extends AppCompatActivity implements SearchView.OnQueryTe
         updateLayout(obj);//執行更新後顯示
         return false;
     }
-    private ArrayList<SingleRow> mSearchList;
+    private ArrayList<SingleRow> mSearchList;//存放搜尋後的List
     public ArrayList<SingleRow> searchItem(String name) {
         mSearchList = new ArrayList<SingleRow>();
         int size = title.size();
         for (int i = 0; i < size ; i++) {
-            int index = title.get(i).indexOf(name);//傳回 title.get(i) 字串中所指定子字串 name 第一次出現所在的位置(索引)。如找不到，則傳回 -1。
-            // 存在匹配的數據
+            int index = title.get(i).indexOf(name);//搜尋在title.get(i)字串裡所指定的字串name第一次出現的位置(索引位置)。如找不到，則傳回 -1。
+            // 如果存在匹配的數據
             if (index != -1) {
-                mSearchList.add(new SingleRow(title.get(i), content.get(i), R.drawable.twitter_128, created.get(i)));//找到匹配的數據後,依序放入list
+                mSearchList.add(new SingleRow(title.get(i), content.get(i), image2.get(i), created.get(i)));//找到搜尋的數據後,依序放入list
             }
         }
         return mSearchList;
     }
     public void updateLayout(ArrayList<SingleRow> obj) {
 
-        listView.setAdapter(new MyAdapter(this,obj));//更新匹配後的listView
+        listView.setAdapter(new MyAdapter(this,obj));//更新搜尋後的listView
 
 
     }
-//    @Override
-//    public
-//    void onNewIntent(Intent intent){
-//        super.onNewIntent(intent);
-////獲得搜索框裡值
-////        handleIntent(intent);
-//    }
-//
-//    private void handleIntent(Intent intent) {
-//
-//        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-//            String query = intent.getStringExtra(SearchManager.QUERY);
-//            //use the query to search your data somehow
-//            listView.setFilterText(query);
-//        }
-//    }
+
 
 private SwipeRefreshLayout.OnRefreshListener onSwipeToRefresh = new SwipeRefreshLayout.OnRefreshListener() {
     @Override
@@ -301,23 +306,33 @@ private SwipeRefreshLayout.OnRefreshListener onSwipeToRefresh = new SwipeRefresh
 
 
     Bundle bundle=new Bundle();
+    SingleRow getSearch;
     AdapterView.OnItemClickListener msgInfo = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            SingleRow getSearch = obj.get(position);//建一個SingleRow物件,將裡的String參數指定給getSearch
-
             Intent intent = new Intent();
             intent.setClass(SearchBar.this, ListMessage.class);
+
             try {
-                bundle.putInt("img", image.get(position));
+               getSearch = obj.get(position);//建一個SingleRow物件,將裡的String參數指定給getSearch
+                bundle.putString("title", getSearch.title);//藉由getSearch取得String參數
+                bundle.putString("msg", getSearch.subtitle);
+                bundle.putString("date", getSearch.timestamp);
+            }catch (NullPointerException e)
+            {
+                e.printStackTrace();
+                bundle.putString("title", title.get(position));//藉由getSearch取得String參數
+                bundle.putString("msg", content.get(position));
+                bundle.putString("date", created.get(position));
+            }
+
+            try {
+                bundle.putString("load", image2.get(position));
             }catch (IndexOutOfBoundsException e)
             {
-                bundle.putInt("img", image.get(0));
+                bundle.putString("load", image2.get(position));
             }
-            bundle.putString("title", getSearch.title);//藉由getSearch取得String參數
-            bundle.putString("msg", getSearch.subtitle);
-            bundle.putString("date", getSearch.timestamp);
+
             intent.putExtras(bundle);
             startActivity(intent);
 
@@ -328,9 +343,9 @@ private SwipeRefreshLayout.OnRefreshListener onSwipeToRefresh = new SwipeRefresh
         String title;
         String subtitle;
         String timestamp;
-        int img;
+        String img;
 
-        SingleRow(String title,String subtitle, int img, String timestamp)
+        SingleRow(String title,String subtitle, String img, String timestamp)
         {
             this.title = title;
             this.subtitle = subtitle;
@@ -373,6 +388,7 @@ private SwipeRefreshLayout.OnRefreshListener onSwipeToRefresh = new SwipeRefresh
                 convertView = myInflater.inflate(R.layout.list_design,null);
                 holder = new ViewHolder();//建立holder物件做Tag
                 holder.imgLogo = (ImageView) convertView.findViewById(R.id.imgLogo);
+                holder.networkImageView = (NetworkImageView)convertView.findViewById(R.id.networkImageView);//找到 NetworkImageView
                 holder.txtname = (TextView) convertView.findViewById(R.id.txtName);
                 holder.txtengName = (TextView)convertView.findViewById(R.id.txtengName);
                 holder.time = (TextView)convertView.findViewById(R.id.creat_time);
@@ -380,8 +396,16 @@ private SwipeRefreshLayout.OnRefreshListener onSwipeToRefresh = new SwipeRefresh
             }else{
                 holder = (ViewHolder)convertView.getTag();
             }
+            if(queue == null){
+                queue = Volley.newRequestQueue(SearchBar.this);
+            }
+
+
+            ImageLoader imageLoader = new ImageLoader(queue, new BitmapCache());
             SingleRow temp=listarray.get(position);
-            holder.imgLogo.setImageResource(temp.img);
+            holder.networkImageView.setImageUrl(temp.img, imageLoader);
+            holder.networkImageView.setDefaultImageResId(R.drawable.apple_128);//預設圖一樣可以用 0 表示不預設
+            holder.networkImageView.setErrorImageResId(R.drawable.twitter_128);
             holder.txtname.setText(temp.title);
             holder.txtengName.setText(temp.subtitle);
             holder.time.setText(temp.timestamp);
@@ -390,10 +414,36 @@ private SwipeRefreshLayout.OnRefreshListener onSwipeToRefresh = new SwipeRefresh
         }
     }
     static class ViewHolder{
+        NetworkImageView networkImageView;
         ImageView imgLogo;
         TextView txtname;
         TextView txtengName;
         TextView time;
+    }
+    @TargetApi(12)//因為 LruCache 需要 api 12
+    public class BitmapCache implements ImageLoader.ImageCache {
+        private LruCache<String, Bitmap> lruCache;//LruCache 是 android 內建 cache 核心
+
+        public BitmapCache(){
+//            int maxMemSize = 10*1024*1024;//預計 cache 大小：10M
+            int maxMemSize = (int)(Runtime.getRuntime().maxMemory()/1024)/8;//全部記憶體的 1/8
+            lruCache = new LruCache<String, Bitmap>(maxMemSize){//設定預計的 cache 大小
+                @Override
+                protected int sizeOf(String key, Bitmap bitmap){//用來計算被 cache 的圖的大小
+                    return bitmap.getRowBytes() * bitmap.getHeight();
+                }
+            };
+        }
+
+        @Override
+        public Bitmap getBitmap(String url) {//透過 url 檢查有沒有圖在 cache 中，有就回傳。或可不可以新建，可以就回傳。
+            return lruCache.get(url);
+        }
+
+        @Override
+        public void putBitmap(String url, Bitmap bitmap) {//把圖存到 cache 中
+            lruCache.put(url, bitmap);
+        }
     }
 class asyncTaskNetConnect extends AsyncTask<Void, Integer, Void> {
     private int progress = 0;
@@ -442,7 +492,7 @@ class asyncTaskNetConnect extends AsyncTask<Void, Integer, Void> {
             queue = Volley.newRequestQueue(SearchBar.this.getApplicationContext());
         }
 
-        String url = "http://192.168.1.103:8000/po";
+        String url = "http://192.168.1.109:8000/po";
 //            while(progress < count) {
 //                try {
 
@@ -487,7 +537,7 @@ class asyncTaskNetConnect extends AsyncTask<Void, Integer, Void> {
                                 created.add(jsonObject.optString("created_at").toString());
 
 
-                                listarray.add(new SingleRow(title.get(i), content.get(i), R.drawable.twitter_128, created.get(i)));
+                                listarray.add(new SingleRow(title.get(i), content.get(i), image2.get(i), created.get(i)));
 
                                 myadapter = new MyAdapter(SearchBar.this,listarray);
                                 listView.setAdapter(myadapter);

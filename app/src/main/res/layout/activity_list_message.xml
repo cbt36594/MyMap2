@@ -12,35 +12,44 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#cdf2ed">
+        android:background="@drawable/back_image3">
+
+
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/MyMaterialTheme">
+            <include layout="@layout/toolbar" />
         </android.support.design.widget.AppBarLayout>
-
-        <include layout="@layout/toolbar" />
 
         <android.support.v7.widget.CardView
             android:id="@+id/card_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="350dp"
             android:layout_margin="8dp"
             card_view:cardCornerRadius="4dp"
             card_view:cardElevation="4dp">
-
+            <ScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/scrollView2" >
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <ImageView
-                    android:id="@+id/thumbnail"
+                <!--<ImageView-->
+                    <!--android:id="@+id/thumbnail"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="250dp"-->
+                    <!--android:layout_alignParentTop="true"-->
+                    <!--android:scaleType="centerCrop"-->
+                     <!--/>-->
+                <com.android.volley.toolbox.NetworkImageView
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
+                    android:id="@+id/thumbnail"
                     android:layout_alignParentTop="true"
-                    android:scaleType="centerCrop"
-                     />
-
+                    android:scaleType="centerCrop"/>
                 <TextView
                     android:id="@+id/title1"
                     android:layout_width="wrap_content"
@@ -80,32 +89,16 @@
                     android:layout_alignParentEnd="true" />
 
             </RelativeLayout>
+            </ScrollView>
         </android.support.v7.widget.CardView>
-        <!--<LinearLayout-->
-            <!--android:orientation="vertical"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent">-->
 
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
-                <!--android:id="@+id/msg_title"-->
-                <!--android:textSize="50sp" />-->
+        <WebView
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/webView"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp" />
 
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:id="@+id/msg_comment"-->
-                <!--android:textSize="30sp" />-->
-
-            <!--<ImageView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:id="@+id/img1"-->
-                <!--android:layout_gravity="center_horizontal" />-->
-
-        <!--</LinearLayout>-->
 
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

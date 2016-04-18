@@ -8,7 +8,7 @@ public enum MainTab {
 
     MAP(0, R.string.tab_name_map, MapFragmentA.class),
     GOOGLE(1,R.string.tab_name_favor,listtest.class),
-    FACEBOOK(2,R.string.tab_name_manerger,listtest.class),
+    FACEBOOK(2,R.string.tab_name_favorite,listtest.class),
     APPLE(3,R.string.tab_name_login,listtest.class);
 
     private int idx;

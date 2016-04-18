@@ -31,15 +31,16 @@ import java.util.Map;
  */
 public class TabFragment3 extends Fragment {
 
-    Geocoder geocoder;
-    List<Address> addresses = null;
-    Address address;
-    Button updata,test;
-    EditText title,content,addressEdit,nameEdit ;
-    View page3;
+
+    private Geocoder geocoder;
+    private List<Address> addresses = null;
+    private Address address;
+    private Button updata,test;
+    private EditText title,content,addressEdit,nameEdit ;
+    private View page3;
     private  Calendar mCalendar ;
-    RequestQueue queue;
-    String input;
+    private RequestQueue queue;
+    private String input;
 
     double geoLatitude ;
     double geoLongitude ;
@@ -57,6 +58,7 @@ public class TabFragment3 extends Fragment {
 //        dateEdit.setOnClickListener(dateBtnChoice);
         updata.setOnClickListener(senddata);
         test.setOnClickListener(testlt);
+
         return page3;
 
     }
@@ -84,6 +86,7 @@ public class TabFragment3 extends Fragment {
         }
         return queue;
     }
+    //測試按鈕地址轉經緯
     View.OnClickListener testlt = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -114,7 +117,7 @@ public class TabFragment3 extends Fragment {
         @Override
         public void onClick(View v) {
 
-            String url = "http://192.168.1.103:8000/MapData";
+            String url = "http://192.168.1.109:8000/MapData";
             getRequestQueue();
 
             StringRequest stringRequest = new StringRequest(//需要 4 個參數
@@ -123,33 +126,33 @@ public class TabFragment3 extends Fragment {
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            AlertDialog.Builder tip = new AlertDialog.Builder(getActivity());
-                            tip.setMessage("上傳成功!");
-                            tip.setPositiveButton("確認", new DialogInterface.OnClickListener() {
+                            AlertDialog.Builder tipDialog = new AlertDialog.Builder(getActivity());
+                            tipDialog.setMessage("上傳成功!");
+                            tipDialog.setPositiveButton("確認", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    title.setText("");
+                                    title.setText("");//清空表單內容
                                     content.setText("");
                                     addressEdit.setText("");
                                     nameEdit.setText("");
                                 }
                             });
-                            tip.show();
+                            tipDialog.show();
 
                         }
                     },
                     new Response.ErrorListener() {//處理錯誤回應用的匿名函式
                         @Override
                         public void onErrorResponse(VolleyError error) {//改寫處理的函式
-                            AlertDialog.Builder erroemsg = new AlertDialog.Builder(getActivity());
-                            erroemsg.setMessage("上傳失敗!");
-                            erroemsg.setPositiveButton("確認", new DialogInterface.OnClickListener() {
+                            AlertDialog.Builder erroeMsg = new AlertDialog.Builder(getActivity());
+                            erroeMsg.setMessage("上傳失敗!");
+                            erroeMsg.setPositiveButton("確認", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
 
                                 }
                             });
-                            erroemsg.show();
+                            erroeMsg.show();
                             Toast.makeText(getActivity(),"請確認資料無空白..",Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -157,9 +160,9 @@ public class TabFragment3 extends Fragment {
                 @Override
 
                 protected Map<String, String> getParams() {
-                    input = addressEdit.getText().toString();
+                    input = addressEdit.getText().toString();//宣告變數input儲存輸入的地址
 
-                    geocoder = new Geocoder(getActivity(), Locale.TRADITIONAL_CHINESE);
+                    geocoder = new Geocoder(getActivity(), Locale.TRADITIONAL_CHINESE);//地址轉經緯度
 
 
                     try{

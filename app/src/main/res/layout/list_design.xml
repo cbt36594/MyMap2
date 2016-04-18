@@ -4,14 +4,19 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
-    <ImageView
+    <!--<ImageView-->
+        <!--android:layout_width="80dp"-->
+        <!--android:layout_height="80dp"-->
+        <!--android:id="@+id/imgLogo"-->
+        <!--android:scaleType="fitCenter"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_weight="0.1" />-->
+    <com.android.volley.toolbox.NetworkImageView
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:id="@+id/imgLogo"
-        android:scaleType="fitCenter"
         android:layout_alignParentTop="true"
+        android:id="@+id/networkImageView"
         android:layout_weight="0.1" />
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -31,7 +36,7 @@
             android:singleLine="true"
             android:maxLength="10"
             android:ellipsize="end"
-            android:textColor="#371903" />
+            android:textColor="#fafaf7" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -42,7 +47,8 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:singleLine="true"
-            android:textColor="#662e04" />
+            android:textColor="#c2c1c1"
+            android:layout_marginTop="5dp" />
     </LinearLayout>
 
     <TextView
@@ -51,7 +57,8 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:id="@+id/creat_time"
         android:layout_gravity="right"
-        android:textColor="#813b07" />
+        android:textColor="#faf7f5"
+        android:layout_marginRight="5dp" />
 
 </LinearLayout>
 

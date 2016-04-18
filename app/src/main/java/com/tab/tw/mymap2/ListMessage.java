@@ -1,13 +1,21 @@
 package com.tab.tw.mymap2;
 
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.app.Activity;
 import android.support.v7.widget.Toolbar;
+import android.util.LruCache;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.CookieManager;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,6 +24,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -28,6 +38,7 @@ import java.util.List;
 
 public class ListMessage extends Activity {
 
+    private WebView mWebView = null;
     private RequestQueue queue;
     private List<String> id;
     private List<String> title;
@@ -61,36 +72,104 @@ public class ListMessage extends Activity {
         end_time = new ArrayList<String>();
         created = new ArrayList<String>();
         list = new listtest();
-        iv = (ImageView)findViewById(R.id.thumbnail);
+//        iv = (ImageView)findViewById(R.id.thumbnail);
         txvtitle = (TextView)findViewById(R.id.title1);
         txvmsg = (TextView)findViewById(R.id.subcomment);
         txvdate = (TextView)findViewById(R.id.datetime);
         Bundle b=this.getIntent().getExtras();
-        try {
-            iv.setImageResource(b.getInt("img"));
-        }catch (IndexOutOfBoundsException e)
-        {
-            iv.setImageResource(R.mipmap.emmawason01);
-
+        if(queue == null){
+            queue = Volley.newRequestQueue(this);
         }
+
+
+        ImageLoader imageLoader = new ImageLoader(queue, new BitmapCache());
+
+        NetworkImageView networkImageView = (NetworkImageView)findViewById(R.id.thumbnail);
+
+        networkImageView.setImageUrl(b.getString("load"), imageLoader);
+        networkImageView.setDefaultImageResId(R.drawable.apple_128);//預設圖一樣可以用 0 表示不預設
+        networkImageView.setErrorImageResId(R.drawable.twitter_128);
+
+//        try {
+//            iv.setImageResource(b.getInt("img"));
+//        }catch (IndexOutOfBoundsException e)
+//        {
+//            iv.setImageResource(R.mipmap.emmawason01);
+//
+//        }
 
         txvtitle.setText(b.getString("title"));
         txvmsg.setText(b.getString("msg"));
         txvdate.setText(b.getString("date"));
 //        asyncTaskNetConnect test =  new asyncTaskNetConnect();
 //        test.execute();
+        mWebView = (WebView)findViewById(R.id.webView);
 
+        mWebView.loadUrl("http://192.168.1.109:8000/");
+        mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.requestFocus();
+        mWebView.setWebViewClient(mWebViewClient);
+        if (Build.VERSION.SDK_INT >= 21) {//系統默認禁止了mixed content和第三方cookie。所以開啟!
+            mWebView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+            CookieManager.getInstance().setAcceptThirdPartyCookies(mWebView, true);
+        }
     }
+    @TargetApi(12)//因為 LruCache 需要 api 12
+    public class BitmapCache implements ImageLoader.ImageCache {
+        private LruCache<String, Bitmap> lruCache;//LruCache 是 android 內建 cache 核心
+
+        public BitmapCache(){
+//            int maxMemSize = 10*1024*1024;//預計 cache 大小：10M
+            int maxMemSize = (int)(Runtime.getRuntime().maxMemory()/1024)/8;//全部記憶體的 1/8
+            lruCache = new LruCache<String, Bitmap>(maxMemSize){//設定預計的 cache 大小
+                @Override
+                protected int sizeOf(String key, Bitmap bitmap){//用來計算被 cache 的圖的大小
+                    return bitmap.getRowBytes() * bitmap.getHeight();
+                }
+            };
+        }
+
+        @Override
+        public Bitmap getBitmap(String url) {//透過 url 檢查有沒有圖在 cache 中，有就回傳。或可不可以新建，可以就回傳。
+            return lruCache.get(url);
+        }
+
+        @Override
+        public void putBitmap(String url, Bitmap bitmap) {//把圖存到 cache 中
+            lruCache.put(url, bitmap);
+        }
+    }
+    WebViewClient mWebViewClient = new WebViewClient() {
+
+        @Override//處理跳轉頁面時,在webView內跳轉
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+
+
+            return super.shouldOverrideUrlLoading(view, url);
+        }
+        @Override//處理facebook登入後跳轉空白頁面問題
+        public void onPageFinished(WebView view, String url) {
+
+            String webUrl = mWebView.getUrl();
+            if(url.startsWith("https://www.facebook.com/connect/connect_to_external_page_widget_loggedin.php")){
+                webUrl = "http://192.168.1.109:8000/";
+                view.loadUrl(webUrl);
+                return;
+            } else if (url.startsWith("https://www.facebook.com/plugins/close_popup.php")) {
+                webUrl = "http://192.168.1.109:8000/";
+                view.loadUrl(webUrl);
+                return;
+            }
+            super.onPageFinished(view, url);
+        }
+    };
 
     public Toolbar initToolbar() {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.inflateMenu(R.menu.menu_main);//建構一個menu使toolbar成為Activity控件
-        toolbar.setNavigationIcon(R.drawable.back_0116);
-//        toolbar.setLogo(R.mipmap.flag_icon96) ;
+        toolbar.inflateMenu(R.menu.menu_info_message);//建構一個menu使toolbar成為Activity控件
+        toolbar.setNavigationIcon(R.drawable.ic_menu_back);
         toolbar.setTitle(R.string.title_activity_maps);
-//        toolbar.setSubtitle("Sub title");
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -107,8 +186,7 @@ public class ListMessage extends Activity {
                     case R.id.action_settings:
 
                         break;
-                    case R.id.main_menu_search:
-                        break;
+
                 }
                 return true;
             }
@@ -163,7 +241,7 @@ public class ListMessage extends Activity {
                 queue = Volley.newRequestQueue(ListMessage.this.getApplicationContext());
             }
 
-            String url = "http://192.168.1.103:8000/po";
+            String url = "http://192.168.1.109:8000/po";
             while(progress < count) {
                 try {
 

@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="#cdf2ed">
+        android:background="@drawable/back_image3">
 
 
         <LinearLayout

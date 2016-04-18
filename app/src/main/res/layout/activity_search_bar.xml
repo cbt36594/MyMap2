@@ -11,10 +11,10 @@
         android:choiceMode="singleChoice"
         >
     <!-- The navigation drawer -->
-    <ListView android:id="@+id/left_drawer"
+    <ListView android:id="@+id/search_left_drawer"
         android:layout_width="240dp"
         android:layout_height="match_parent"
-        android:background="#fff000"/>
+        android:background="#2196F3"/>
     </RelativeLayout>
     <LinearLayout
         android:id="@+id/title_bar"
@@ -38,7 +38,7 @@
             android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#79cec1"
+            android:background="@drawable/back_image3"
             />
     </LinearLayout>
 </android.support.v4.widget.DrawerLayout>
