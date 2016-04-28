@@ -3,12 +3,12 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <item android:drawable="@drawable/facebook_128"
+    <item android:drawable="@drawable/refresh_on"
         android:state_selected="true"></item>
 
-    <item android:drawable="@drawable/facebook_128_press"
+    <item android:drawable="@drawable/refresh_press"
         android:state_pressed="true"></item>
 
-    <item android:drawable="@drawable/facebook_128"></item>
+    <item android:drawable="@drawable/refresh_on"></item>
 
 </selector>

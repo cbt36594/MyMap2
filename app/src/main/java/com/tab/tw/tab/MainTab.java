@@ -2,14 +2,14 @@ package com.tab.tw.tab;
 
 import com.tab.tw.mymap2.MapFragmentA;
 import com.tab.tw.mymap2.R;
-import com.tab.tw.mymap2.listtest;
+import com.tab.tw.mymap2.Listtest;
 
 public enum MainTab {
 
     MAP(0, R.string.tab_name_map, MapFragmentA.class),
-    GOOGLE(1,R.string.tab_name_favor,listtest.class),
-    FACEBOOK(2,R.string.tab_name_favorite,listtest.class),
-    APPLE(3,R.string.tab_name_login,listtest.class);
+    GOOGLE(1,R.string.tab_name_favor,Listtest.class),
+    FACEBOOK(2,R.string.tab_name_favorite,Listtest.class),
+    APPLE(3,R.string.tab_name_login,Listtest.class);
 
     private int idx;
     private int resName;

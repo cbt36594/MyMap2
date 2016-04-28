@@ -4,7 +4,7 @@
     <string name="google_app_id">MyMap2</string>
     <string name="action_settings">設定</string>
     <string name="main_menu_search">搜尋</string>
-
+    <string name="drawer_title">相關選單</string>
     <string name="tab_name_map">Map</string>
     <string name="tab_name_favor">優惠清單</string>
     <string name="tab_name_favorite">我的最愛</string>
@@ -33,6 +33,9 @@
     <string name="title_activity_list_message">ListMessage</string>
 
     <string name="google_play_service_missing">GooglePlayService失敗!!</string>
+    <string name="permissions_result_failed">未授權GPS</string>
+    <string name="confirm_connect">請確認網路連線..</string>
+    <string name="connect_success">連線成功</string>
 
     <string name="app_label">搜尋</string>
     <string name="search_hint">提示..</string>
@@ -40,4 +43,13 @@
     <string name="open">open</string>
     <string name="close">close</string>
     <string name="favorite">加到最愛</string>
+    <string name="confirm_add_favorite">確定要加到我的最愛嗎?</string>
+    <string name="confirm_remove_favorite">確定要移除出我的最愛嗎?</string>
+    <string name="ok_btn">確認</string>
+    <string name="cancel_btn">取消</string>
+    <string name="refresh_finish">更新完成!</string>
+
+    <string name="marker_failed">標記失敗..請確認連線OK後再重試~</string>
+    <string name="data_failed">資料讀取失敗，請確認連線!</string>
+
 </resources>

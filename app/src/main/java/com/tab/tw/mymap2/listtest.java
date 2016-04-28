@@ -57,7 +57,7 @@ import java.util.List;
 /**
  * Created by Nevic on 2016/2/16.
  */
-public class listtest extends Fragment implements ListView.OnCreateContextMenuListener {
+public class Listtest extends Fragment implements ListView.OnCreateContextMenuListener {
 
     private SQLiteDatabase db;
     private ViewHolder holder; //建立標籤可以暫存View
@@ -74,29 +74,27 @@ public class listtest extends Fragment implements ListView.OnCreateContextMenuLi
     private List<String> end_time;
     private List<String> created;
     private List<Integer> image;
-    private List<String> image2;
+    private List<String> imageLoad;
     private View layout;
     private ListView list;
     private ImageView iv;
     private MyDBHelper dbhelper;
     private asyncTaskNetConnect async;
-
-    private ArrayList<SingleRow> listarray;
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-
-    }
+    private ArrayList<ListViewAttributes> listarray;
 
     @Override//取得畫面
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
         layout = inflater.inflate(R.layout.listtest, container, false);
 
+        return layout;
+    }
+    @Override//當畫面取得後執行方法
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
+        initView();
         openDB();
         id1 = new ArrayList<String>();
         title = new ArrayList<String>();
@@ -108,54 +106,43 @@ public class listtest extends Fragment implements ListView.OnCreateContextMenuLi
         end_time = new ArrayList<String>();
         created = new ArrayList<String>();
         image= new ArrayList<Integer>();
-        image2 = new ArrayList<String>();
+        imageLoad = new ArrayList<String>();
         image.add(R.drawable.secen01);
-        image.add(R.drawable.secen02);
-        image.add(R.drawable.secen03);
-        image.add(R.drawable.secen04);
-        image.add(R.drawable.secen05);
-        return layout;
-    }
-    @Override//當畫面取得後執行方法
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        initView();
-        image2.add("http://192.168.1.109:8000/img/01.jpg");
-        image2.add("http://192.168.1.109:8000/img/02.jpg");
-        image2.add("http://192.168.1.109:8000/img/03.jpg");
-        image2.add("http://192.168.1.109:8000/img/04.jpg");
-        image2.add("http://192.168.1.109:8000/img/05.jpg");
-        image2.add("http://192.168.1.109:8000/img/06.jpg");
-        image2.add("http://192.168.1.109:8000/img/07.jpg");
-        image2.add("http://192.168.1.109:8000/img/08.jpg");
-        image2.add("http://192.168.1.109:8000/img/09.jpg");
-        image2.add("http://192.168.1.109:8000/img/10.jpg");
-        image2.add("http://192.168.1.109:8000/img/11.jpg");
-        image2.add("http://192.168.1.109:8000/img/12.jpg");
-        image2.add("http://192.168.1.109:8000/img/13.jpg");
-        image2.add("http://192.168.1.109:8000/img/14.jpg");
-        image2.add("http://192.168.1.109:8000/img/15.jpg");
-        image2.add("http://192.168.1.109:8000/img/16.jpg");
-        image2.add("http://192.168.1.109:8000/img/17.jpg");
-        image2.add("http://192.168.1.109:8000/img/18.jpg");
-        image2.add("http://192.168.1.109:8000/img/19.jpg");
-        image2.add("http://192.168.1.109:8000/img/20.jpg");
-        image2.add("http://192.168.1.109:8000/img/21.jpg");
-        image2.add("http://192.168.1.109:8000/img/22.jpg");
-        image2.add("http://192.168.1.109:8000/img/23.jpg");
-        image2.add("http://192.168.1.109:8000/img/24.jpg");
-        image2.add("http://192.168.1.109:8000/img/25.jpg");
-        image2.add("http://192.168.1.109:8000/img/26.jpg");
-        image2.add("http://192.168.1.109:8000/img/27.jpg");
-        image2.add("http://192.168.1.109:8000/img/28.jpg");
-        image2.add("http://192.168.1.109:8000/img/29.jpg");
-        image2.add("http://192.168.1.109:8000/img/30.jpg");
-        image2.add("http://192.168.1.109:8000/img/31.jpg");
-        image2.add("http://192.168.1.109:8000/img/32.jpg");
-        image2.add("http://192.168.1.109:8000/img/33.jpg");
-        image2.add("http://192.168.1.109:8000/img/34.jpg");
-        listarray = new ArrayList<SingleRow>();
+        imageLoad.add("http://192.168.1.109:8000/img/01.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/02.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/03.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/04.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/05.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/06.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/07.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/08.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/09.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/10.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/11.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/12.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/13.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/14.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/15.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/16.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/17.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/18.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/19.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/20.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/21.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/22.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/23.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/24.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/25.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/26.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/27.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/28.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/29.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/30.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/31.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/32.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/33.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/34.jpg");
+        listarray = new ArrayList<ListViewAttributes>();
 
         async = new asyncTaskNetConnect();
         async.execute();
@@ -187,7 +174,7 @@ public class listtest extends Fragment implements ListView.OnCreateContextMenuLi
 //        values.put(_ID,id1.get(position));
         values.put(TITLE, title.get(position));
         values.put(CONTENT, content.get(position));
-        values.put(IMAGE, image2.get(position));
+        values.put(IMAGE, imageLoad.get(position));
         values.put(DATE, created.get(position));
         db.insert(_TableName, null, values);
     }
@@ -221,8 +208,8 @@ public class listtest extends Fragment implements ListView.OnCreateContextMenuLi
 
                 Toast.makeText(getActivity(),String.valueOf(menuInfo.position), Toast.LENGTH_SHORT).show();
                 AlertDialog.Builder ask = new AlertDialog.Builder(getActivity());
-                ask.setMessage("確定要加到我的最愛嗎?");
-                ask.setPositiveButton("確定", new DialogInterface.OnClickListener() {
+                ask.setMessage(R.string.confirm_add_favorite);
+                ask.setPositiveButton(R.string.ok_btn, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -231,7 +218,7 @@ public class listtest extends Fragment implements ListView.OnCreateContextMenuLi
 
                     }
                 });
-                ask.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                ask.setNegativeButton(R.string.cancel_btn, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -254,16 +241,13 @@ public class listtest extends Fragment implements ListView.OnCreateContextMenuLi
 
             new asyncTaskNetConnect().execute();
 
-//            list.setAdapter(adapter);
-
-
             adapter.notifyDataSetChanged();
             new Handler().postDelayed(new Runnable() {
 
                 @Override
                 public void run() {
                     laySwipe.setRefreshing(false);
-                    Toast.makeText(getActivity(), "更新完成!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.refresh_finish, Toast.LENGTH_SHORT).show();
                 }
             }, 2000);
         }
@@ -292,8 +276,6 @@ public class listtest extends Fragment implements ListView.OnCreateContextMenuLi
 //        return queue;
 //    }
 
-
-
     Bundle bundle=new Bundle();
     AdapterView.OnItemClickListener msgInfo = new AdapterView.OnItemClickListener() {
         @Override
@@ -302,12 +284,11 @@ public class listtest extends Fragment implements ListView.OnCreateContextMenuLi
             Intent intent = new Intent();
             intent.setClass(getActivity(), ListMessage.class);
             try {
-//                bundle.putInt("img", image.get(position));
-                bundle.putString("load", image2.get(position));
+
+                bundle.putString("load", imageLoad.get(position));
             }catch (IndexOutOfBoundsException e)
             {
-//                bundle.putInt("img", image.get(0));
-                bundle.putString("load", image2.get(0));
+                bundle.putString("load", imageLoad.get(0));
             }
 
                 bundle.putString("title", title.get(position));
@@ -315,30 +296,15 @@ public class listtest extends Fragment implements ListView.OnCreateContextMenuLi
                 bundle.putString("date", created.get(position));
                 intent.putExtras(bundle);
                 startActivity(intent);
-
         }
     };
-    class SingleRow //初始化list_layout內容
-    {
-        String title;
-        String subtitle;
-        String timestamp;
-        String img;
 
-        SingleRow(String title,String subtitle, String img, String timestamp)
-        {
-            this.title = title;
-            this.subtitle = subtitle;
-            this.img=img;
-            this.timestamp=timestamp;
-        }
-    }
     public class MyAdapter extends BaseAdapter {
 
         private LayoutInflater myInflater;
-        ArrayList<SingleRow> listarray;
+        ArrayList<ListViewAttributes> listarray;
         Context context;
-        public MyAdapter(Context c,ArrayList<SingleRow> listarray){
+        public MyAdapter(Context c,ArrayList<ListViewAttributes> listarray){
             this.context = c;
             this.listarray =listarray;
 
@@ -385,7 +351,7 @@ public class listtest extends Fragment implements ListView.OnCreateContextMenuLi
             ImageLoader imageLoader = new ImageLoader(queue, new BitmapCache());
 
 
-            SingleRow temp=listarray.get(position);
+            ListViewAttributes temp=listarray.get(position);
             holder.networkImageView.setImageUrl(temp.img, imageLoader);
             holder.networkImageView.setDefaultImageResId(R.drawable.apple_128);//預設圖一樣可以用 0 表示不預設
             holder.networkImageView.setErrorImageResId(R.drawable.twitter_128);
@@ -521,8 +487,8 @@ public class listtest extends Fragment implements ListView.OnCreateContextMenuLi
                                             end_time.add(jsonObject.optString("end_time").toString());
                                             created.add(jsonObject.optString("created_at").toString());
 
-                                                //list.add(new SingleRow(pasuram_en[i], imgs[i]));
-                                            listarray.add(new SingleRow(title.get(i), content.get(i), image2.get(i), created.get(i)));
+                                                //list.add(new ListViewAttributes(pasuram_en[i], imgs[i]));
+                                            listarray.add(new ListViewAttributes(title.get(i), content.get(i), imageLoad.get(i), created.get(i)));
 
                                             adapter = new MyAdapter(getActivity(),listarray);
                                             list.setAdapter(adapter);
@@ -539,7 +505,7 @@ public class listtest extends Fragment implements ListView.OnCreateContextMenuLi
                             new Response.ErrorListener() {//處理錯誤回應用的匿名函式
                                 @Override
                                 public void onErrorResponse(VolleyError error) {//改寫處理的函式
-                                    Toast.makeText(getActivity(), "標記失敗..請確認連線OK後再重試~", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getActivity(), R.string.data_failed, Toast.LENGTH_LONG).show();
                                     System.out.println("回傳錯誤:" + error.toString());
                                 }
                             }
@@ -548,7 +514,7 @@ public class listtest extends Fragment implements ListView.OnCreateContextMenuLi
                     };
 
                     stringRequest.setShouldCache(false);
-                    //3) 把要執行的 StringRequest 加到隊列中執行
+                    // 把要執行的 StringRequest 加到隊列中執行
                     queue.add(stringRequest);
 //                    progress++;
 //

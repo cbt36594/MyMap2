@@ -84,7 +84,7 @@ public class SearchBar extends AppCompatActivity implements SearchView.OnQueryTe
 
     asyncTaskNetConnect async;
 
-    private ArrayList<SingleRow> listarray;
+    private ArrayList<ListViewAttributes> listarray;
 
 
     @Override
@@ -115,7 +115,7 @@ public class SearchBar extends AppCompatActivity implements SearchView.OnQueryTe
 
 //        listView.setAdapter(new ArrayAdapter<Object>(getApplicationContext(),
 //                android.R.layout.simple_expandable_list_item_1, names));
-        listarray = new ArrayList<SingleRow>();
+        listarray = new ArrayList<ListViewAttributes>();
 
         async = new asyncTaskNetConnect();
         async.execute();
@@ -208,8 +208,6 @@ public class SearchBar extends AppCompatActivity implements SearchView.OnQueryTe
 
     }
 
-
-
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_search, menu);
@@ -235,27 +233,27 @@ public class SearchBar extends AppCompatActivity implements SearchView.OnQueryTe
     public boolean onQueryTextSubmit(String query) {
         return false;
     }
-    private ArrayList<SingleRow> obj;
+    private ArrayList<ListViewAttributes> obj;
     @Override
     public boolean onQueryTextChange(String newText) {
         obj = searchItem(newText);
         updateLayout(obj);//執行更新後顯示
         return false;
     }
-    private ArrayList<SingleRow> mSearchList;//存放搜尋後的List
-    public ArrayList<SingleRow> searchItem(String name) {
-        mSearchList = new ArrayList<SingleRow>();
+    private ArrayList<ListViewAttributes> mSearchList;//存放搜尋後的List
+    public ArrayList<ListViewAttributes> searchItem(String name) {
+        mSearchList = new ArrayList<ListViewAttributes>();
         int size = title.size();
         for (int i = 0; i < size ; i++) {
             int index = title.get(i).indexOf(name);//搜尋在title.get(i)字串裡所指定的字串name第一次出現的位置(索引位置)。如找不到，則傳回 -1。
             // 如果存在匹配的數據
             if (index != -1) {
-                mSearchList.add(new SingleRow(title.get(i), content.get(i), image2.get(i), created.get(i)));//找到搜尋的數據後,依序放入list
+                mSearchList.add(new ListViewAttributes(title.get(i), content.get(i), image2.get(i), created.get(i)));//找到搜尋的數據後,依序放入list
             }
         }
         return mSearchList;
     }
-    public void updateLayout(ArrayList<SingleRow> obj) {
+    public void updateLayout(ArrayList<ListViewAttributes> obj) {
 
         listView.setAdapter(new MyAdapter(this,obj));//更新搜尋後的listView
 
@@ -306,7 +304,7 @@ private SwipeRefreshLayout.OnRefreshListener onSwipeToRefresh = new SwipeRefresh
 
 
     Bundle bundle=new Bundle();
-    SingleRow getSearch;
+    ListViewAttributes getSearch;
     AdapterView.OnItemClickListener msgInfo = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -338,27 +336,13 @@ private SwipeRefreshLayout.OnRefreshListener onSwipeToRefresh = new SwipeRefresh
 
         }
     };
-    class SingleRow //初始化list_layout內容
-    {
-        String title;
-        String subtitle;
-        String timestamp;
-        String img;
 
-        SingleRow(String title,String subtitle, String img, String timestamp)
-        {
-            this.title = title;
-            this.subtitle = subtitle;
-            this.img=img;
-            this.timestamp=timestamp;
-        }
-    }
     public class MyAdapter extends BaseAdapter {
 
         private LayoutInflater myInflater;
-        ArrayList<SingleRow> listarray;
+        ArrayList<ListViewAttributes> listarray;
         Context context;
-        public MyAdapter(Context c, ArrayList<SingleRow> listarray){
+        public MyAdapter(Context c, ArrayList<ListViewAttributes> listarray){
             this.context = c;
             this.listarray =listarray;
 
@@ -402,7 +386,7 @@ private SwipeRefreshLayout.OnRefreshListener onSwipeToRefresh = new SwipeRefresh
 
 
             ImageLoader imageLoader = new ImageLoader(queue, new BitmapCache());
-            SingleRow temp=listarray.get(position);
+            ListViewAttributes temp=listarray.get(position);
             holder.networkImageView.setImageUrl(temp.img, imageLoader);
             holder.networkImageView.setDefaultImageResId(R.drawable.apple_128);//預設圖一樣可以用 0 表示不預設
             holder.networkImageView.setErrorImageResId(R.drawable.twitter_128);
@@ -537,7 +521,7 @@ class asyncTaskNetConnect extends AsyncTask<Void, Integer, Void> {
                                 created.add(jsonObject.optString("created_at").toString());
 
 
-                                listarray.add(new SingleRow(title.get(i), content.get(i), image2.get(i), created.get(i)));
+                                listarray.add(new ListViewAttributes(title.get(i), content.get(i), image2.get(i), created.get(i)));
 
                                 myadapter = new MyAdapter(SearchBar.this,listarray);
                                 listView.setAdapter(myadapter);

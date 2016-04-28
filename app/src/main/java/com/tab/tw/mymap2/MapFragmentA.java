@@ -16,18 +16,15 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.util.LruCache;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,7 +36,6 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -90,10 +86,10 @@ public class MapFragmentA extends Fragment implements OnMapReadyCallback, Google
     private List<String> start_time;
     private List<String> end_time;
     private List<String> created;
-    private List<Integer> image2;
-    private List<String> image3;
+//    private List<Integer> image2;
+    private List<String> imageLoad;
     private HashMap<String,String> markers = new HashMap<>();
-    private HashMap<String,String> image = new HashMap<>();
+    private HashMap<String,String> getImage = new HashMap<>();
     private View rootView, failconnect, customwindow;
     private GoogleMap mMap;
     private NetworkImageView infoimg;
@@ -102,55 +98,6 @@ public class MapFragmentA extends Fragment implements OnMapReadyCallback, Google
 
 
 
-    private LocationListener mLocationListener = new LocationListener() {
-        @Override
-        public void onLocationChanged(Location location) {
-            if (location != null) {
-
-                Toast.makeText(getActivity(), String.format("%f, %f", location.getLatitude(), location.getLongitude()), Toast.LENGTH_SHORT).show();
-                drawMarker(location);
-
-                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) !=
-                        PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity()
-                        , Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-                    return;
-                }
-                mlocationManager.removeUpdates(mLocationListener);
-            } else {
-
-                Toast.makeText(getActivity(), "Location is null", Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-
-        }
-
-
-    };
-
-    private void drawMarker(Location location) {
-        if (mMap != null) {
-//            mMap.clear();
-            LatLng gps = new LatLng(location.getLatitude(), location.getLongitude());
-//            mMap.addMarker(new MarkerOptions()
-//                    .position(gps)
-//                    .title("目前位置"));
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(gps, 14));
-        }
-    }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
@@ -168,10 +115,9 @@ public class MapFragmentA extends Fragment implements OnMapReadyCallback, Google
         start_time = new ArrayList<String>();
         end_time = new ArrayList<String>();
         created = new ArrayList<String>();
-        date2  = new ArrayList<Marker>();
-        image2 = new ArrayList<Integer>();
-        image3 = new ArrayList<String>();
-        image2.add(R.drawable.secen02);
+//        image2 = new ArrayList<Integer>();
+        imageLoad = new ArrayList<String>();
+//        image2.add(R.drawable.secen02);
 
         if (googleServicesAvailable()) {
 
@@ -217,44 +163,90 @@ public class MapFragmentA extends Fragment implements OnMapReadyCallback, Google
 
             }
         });
-        image3.add("http://192.168.1.109:8000/img/01.jpg");
-        image3.add("http://192.168.1.109:8000/img/02.jpg");
-        image3.add("http://192.168.1.109:8000/img/03.jpg");
-        image3.add("http://192.168.1.109:8000/img/04.jpg");
-        image3.add("http://192.168.1.109:8000/img/05.jpg");
-        image3.add("http://192.168.1.109:8000/img/06.jpg");
-        image3.add("http://192.168.1.109:8000/img/07.jpg");
-        image3.add("http://192.168.1.109:8000/img/08.jpg");
-        image3.add("http://192.168.1.109:8000/img/09.jpg");
-        image3.add("http://192.168.1.109:8000/img/10.jpg");
-        image3.add("http://192.168.1.109:8000/img/11.jpg");
-        image3.add("http://192.168.1.109:8000/img/12.jpg");
-        image3.add("http://192.168.1.109:8000/img/13.jpg");
-        image3.add("http://192.168.1.109:8000/img/14.jpg");
-        image3.add("http://192.168.1.109:8000/img/15.jpg");
-        image3.add("http://192.168.1.109:8000/img/16.jpg");
-        image3.add("http://192.168.1.109:8000/img/17.jpg");
-        image3.add("http://192.168.1.109:8000/img/18.jpg");
-        image3.add("http://192.168.1.109:8000/img/19.jpg");
-        image3.add("http://192.168.1.109:8000/img/20.jpg");
-        image3.add("http://192.168.1.109:8000/img/21.jpg");
-        image3.add("http://192.168.1.109:8000/img/22.jpg");
-        image3.add("http://192.168.1.109:8000/img/23.jpg");
-        image3.add("http://192.168.1.109:8000/img/24.jpg");
-        image3.add("http://192.168.1.109:8000/img/25.jpg");
-        image3.add("http://192.168.1.109:8000/img/26.jpg");
-        image3.add("http://192.168.1.109:8000/img/27.jpg");
-        image3.add("http://192.168.1.109:8000/img/28.jpg");
-        image3.add("http://192.168.1.109:8000/img/29.jpg");
-        image3.add("http://192.168.1.109:8000/img/30.jpg");
-        image3.add("http://192.168.1.109:8000/img/31.jpg");
-        image3.add("http://192.168.1.109:8000/img/32.jpg");
-        image3.add("http://192.168.1.109:8000/img/33.jpg");
-        image3.add("http://192.168.1.109:8000/img/34.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/01.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/02.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/03.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/04.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/05.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/06.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/07.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/08.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/09.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/10.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/11.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/12.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/13.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/14.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/15.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/16.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/17.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/18.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/19.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/20.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/21.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/22.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/23.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/24.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/25.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/26.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/27.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/28.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/29.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/30.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/31.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/32.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/33.jpg");
+        imageLoad.add("http://192.168.1.109:8000/img/34.jpg");
         return rootView;
 
     }
+    private LocationListener mLocationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+            if (location != null) {
 
+                Toast.makeText(getActivity(), String.format("%f, %f", location.getLatitude(), location.getLongitude()), Toast.LENGTH_SHORT).show();
+                drawMarker(location);
+                //檢查權限
+                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity()
+                        , Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                    return;
+                }
+                mlocationManager.removeUpdates(mLocationListener);//移除監聽器
+            } else {
+
+                Toast.makeText(getActivity(), "Location is null", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        //當狀態改變時使用
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+        //當所用的Location Provider可用時的方法
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+        //當所用的Location Provider不可用時的方法
+        }
+    };
+
+    private void drawMarker(Location location) {
+        if (mMap != null) {
+//            mMap.clear();
+            LatLng gps = new LatLng(location.getLatitude(), location.getLongitude());
+//            mMap.addMarker(new MarkerOptions()
+//                    .position(gps)
+//                    .title("目前位置"));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(gps, 14));
+        }
+    }
 
     private void getCurrentLocation() {
         boolean isGPSEnabled = mlocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -283,6 +275,7 @@ public class MapFragmentA extends Fragment implements OnMapReadyCallback, Google
             }
 
             if (isGPSEnabled) {
+                //參數一:指定用GPS定位,參數二:每次更新位置最小間隔時間(參考用),參數三:每次更新位置訊息最小距離(米),參數四:對應的監聽器
                 mlocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                         LOCATION_UPDATE_MIN_TIME, LOCATION_UPDATE_MIN_DISTANCE, mLocationListener);
                 location = mlocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -393,13 +386,7 @@ public class MapFragmentA extends Fragment implements OnMapReadyCallback, Google
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-//                 int length = id.size();
-////                setMarker("Local", latLng.latitude, latLng.longitude, "I'm here");
-//                for (int i = 0; i < length; i++) {
-//
-//                    setMarker(title.get(i), Double.parseDouble(latitude.get(i)), Double.parseDouble(longitude.get(i))
-//                            , content.get(i));
-//                }
+
             }
         });
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
@@ -440,7 +427,6 @@ public class MapFragmentA extends Fragment implements OnMapReadyCallback, Google
                 marker.setTitle(add.getLocality());
                 marker.showInfoWindow();
 
-
             }
         });
 
@@ -453,10 +439,9 @@ public class MapFragmentA extends Fragment implements OnMapReadyCallback, Google
                     queue = Volley.newRequestQueue(getActivity());
                 }
 
-
                 ImageLoader imageLoader = new ImageLoader(queue, new BitmapCache());
                 LatLng ll = marker.getPosition();
-                infoimg.setImageUrl(image.get(marker.getId()), imageLoader);
+                infoimg.setImageUrl(getImage.get(marker.getId()), imageLoader);
                 infoimg.setDefaultImageResId(R.drawable.apple_128);//預設圖一樣可以用 0 表示不預設
                 infoimg.setErrorImageResId(R.drawable.twitter_128);
 
@@ -474,11 +459,10 @@ public class MapFragmentA extends Fragment implements OnMapReadyCallback, Google
                     queue = Volley.newRequestQueue(getActivity());
                 }
 
-
                 ImageLoader imageLoader = new ImageLoader(queue, new BitmapCache());
                 LatLng current = marker.getPosition();
 
-                infoimg.setImageUrl(image.get(marker.getId()), imageLoader);
+                infoimg.setImageUrl(getImage.get(marker.getId()), imageLoader);
                 infoimg.setDefaultImageResId(R.drawable.apple_128);//預設圖一樣可以用 0 表示不預設
                 infoimg.setErrorImageResId(R.drawable.twitter_128);
 
@@ -495,11 +479,10 @@ public class MapFragmentA extends Fragment implements OnMapReadyCallback, Google
             @Override
             public void onInfoWindowClick(Marker marker) {//點擊窗口可關閉
 
-
                 Intent intent = new Intent();
                 intent.setClass(getActivity(), ListMessage.class);
-                bundle.putString("load", image.get(marker.getId()));
-                bundle.putInt("img", image2.get(0));
+                bundle.putString("load", getImage.get(marker.getId()));
+//                bundle.putInt("img", image2.get(0));
                 bundle.putString("title", marker.getTitle());
                 bundle.putString("msg", marker.getSnippet());
                 bundle.putString("date", markers.get(marker.getId()));
@@ -508,6 +491,7 @@ public class MapFragmentA extends Fragment implements OnMapReadyCallback, Google
                 marker.hideInfoWindow();
             }
         });
+    }
 ////Marker1
 //        MarkerOptions markerOpt = new MarkerOptions();
 //        markerOpt.position(new LatLng(25.033611, 121.565000));// Position(必要)：使用 LatLng 類別來設定位置，這是唯一必要設定的屬性。
@@ -527,10 +511,9 @@ public class MapFragmentA extends Fragment implements OnMapReadyCallback, Google
 //            setMarker(title.get(i), Double.parseDouble(latitude.get(i)), Double.parseDouble(longitude.get(i))
 //                    , content.get(i));
 //        }
-    }
-        List<Marker> date2;
-        Marker mk;
-        int mkid = 0;
+
+    private Marker mk;
+
     private void setMarker(String locality, double lat, double lng, String snip, String date, String img ) {//放置地圖標記的函式
 
         MarkerOptions options = new MarkerOptions()
@@ -543,21 +526,16 @@ public class MapFragmentA extends Fragment implements OnMapReadyCallback, Google
                 .snippet(snip);
 
         mk = mMap.addMarker(options);
-//        date2.add(date);
         markers.put(mk.getId() ,date);
-        image.put(mk.getId(), img);
+        getImage.put(mk.getId(), img);
     }
 
     private void removeAllMarkers() {
 //        for(Marker marker : markers) {
 //            marker.remove();
 //        }
-
-
         mMap.clear();
-
         markers.clear();
-
     }
 
     private synchronized void configGoogleApiClient() {
@@ -591,8 +569,8 @@ public class MapFragmentA extends Fragment implements OnMapReadyCallback, Google
 
     @Override
     public void onConnectionSuspended(int i) {
-        // Google Services連線中斷
-        // int參數是連線中斷的代號
+        // Google Services連線中斷,int參數是連線中斷的代號
+
 
     }
 
@@ -615,6 +593,11 @@ public class MapFragmentA extends Fragment implements OnMapReadyCallback, Google
     @Override
     public void onStart() {
         googleApiClient.connect();
+//        if(closeGPSgetPosition == false)
+//        {
+//            getCurrentLocation();
+//        }
+//        closeGPSgetPosition = true;
         super.onStart();
     }
 
@@ -622,7 +605,11 @@ public class MapFragmentA extends Fragment implements OnMapReadyCallback, Google
     public void onResume() {
         super.onResume();
 
-
+//        if(closeGPSgetPosition == false)
+//        {
+//            getCurrentLocation();
+//        }
+//        closeGPSgetPosition = true;
 
     }
 
@@ -745,7 +732,7 @@ public class MapFragmentA extends Fragment implements OnMapReadyCallback, Google
                                     end_time.add(jsonObject.optString("end_time").toString());
                                     created.add(jsonObject.optString("created_at").toString());
                                     setMarker(title.get(i), latitude.get(i), longitude.get(i)
-                                            , content.get(i),created.get(i),image3.get(i));
+                                            , content.get(i),created.get(i), imageLoad.get(i));
 
 //                                                publishProgress((i / length) * 100);
                                 }
@@ -759,7 +746,7 @@ public class MapFragmentA extends Fragment implements OnMapReadyCallback, Google
                     new Response.ErrorListener() {//處理錯誤回應用的匿名函式
                         @Override
                         public void onErrorResponse(VolleyError error) {//改寫處理的函式
-                            Toast.makeText(getActivity(), "標記失敗..請確認連線OK後再重試~", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), R.string.marker_failed, Toast.LENGTH_LONG).show();
                             System.out.println("回傳錯誤:" + error.toString());
                         }
                     }
@@ -768,7 +755,7 @@ public class MapFragmentA extends Fragment implements OnMapReadyCallback, Google
             };
 
             stringRequest.setShouldCache(false);
-            //3) 把要執行的 StringRequest 加到隊列中執行
+            // 把要執行的 StringRequest 加到隊列中執行
             queue.add(stringRequest);
 //                    progress++;
 //

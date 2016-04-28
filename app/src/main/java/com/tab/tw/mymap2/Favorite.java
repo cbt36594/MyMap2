@@ -11,6 +11,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.LruCache;
 import android.view.ContextMenu;
@@ -57,14 +58,21 @@ public class Favorite extends Fragment implements View.OnClickListener, ListView
     private ViewHolder holder;
     private RequestQueue queue;
     private ArrayList<SingleRow> sharelist;
-
-    Button refresh;
-    String title,content,img,date;
+    private View favorView;
+    private Button refresh;
+    private String title,content,img,date;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View favorView = inflater.inflate(R.layout.favorite, container, false);
+        favorView = inflater.inflate(R.layout.favorite, container, false);
+
+        return favorView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         mlist = (ListView)favorView.findViewById(R.id.favorlistView);
         sharelist = new ArrayList<SingleRow>();
         settings = this.getActivity().getSharedPreferences("favorite", Context.MODE_PRIVATE);
@@ -82,8 +90,8 @@ public class Favorite extends Fragment implements View.OnClickListener, ListView
         {
             e.printStackTrace();
         }
-        return favorView;
     }
+
     private void openDB(){
         dbhelper = new MyDBHelper(getContext(), DATABASE_NAME, null, VERSION);
     }
@@ -126,25 +134,24 @@ public class Favorite extends Fragment implements View.OnClickListener, ListView
                 final String test = srId.id;
                 Toast.makeText(getActivity(), String.valueOf(menuInfo.position), Toast.LENGTH_SHORT).show();
                 AlertDialog.Builder ask = new AlertDialog.Builder(getActivity());
-                ask.setMessage("確定要移除出我的最愛嗎?");
-                ask.setPositiveButton("確定", new DialogInterface.OnClickListener()
+                ask.setMessage(R.string.confirm_remove_favorite);
+                ask.setPositiveButton(R.string.ok_btn, new DialogInterface.OnClickListener()
                 {
                     @Override
                     public void onClick(DialogInterface dialog, int which)
                     {
 
-
-                            // 刪除資料庫中的記事資料
+                        // 刪除資料庫中的記事資料
                         sharelist.remove(menuInfo.position);
-                        deleteDatabase(test);
+//                        deleteDatabase(test);
+                        dbhelper.delete(test);
                         adapter.notifyDataSetChanged();
 //                        mlist.deferNotifyDataSetChanged();
-//                        dbhelper.delete(test);
+
                     }
 
-
                 });
-                ask.setNegativeButton("取消", new DialogInterface.OnClickListener()
+                ask.setNegativeButton(R.string.cancel_btn, new DialogInterface.OnClickListener()
                 {
                     @Override
                     public void onClick(DialogInterface dialog, int which)
@@ -206,14 +213,14 @@ public class Favorite extends Fragment implements View.OnClickListener, ListView
 
     }
 
-    class SingleRow //初始化list_layout內容
+    class SingleRow //初始化listView屬性
     {
         String id;
         String title;
         String subtitle;
         String timestamp;
         String img;
-        private boolean selected;
+
         SingleRow(String id, String title,String subtitle, String img, String timestamp)
         {
             this.id = id;
@@ -222,13 +229,7 @@ public class Favorite extends Fragment implements View.OnClickListener, ListView
             this.img=img;
             this.timestamp=timestamp;
         }
-        public boolean isSelected() {
-            return selected;
-        }
 
-        public void setSelected(boolean selected) {
-            this.selected = selected;
-        }
     }
     public class MyAdapter extends BaseAdapter {
 
@@ -279,12 +280,8 @@ public class Favorite extends Fragment implements View.OnClickListener, ListView
                 queue = Volley.newRequestQueue(getActivity());
             }
 
-
             ImageLoader imageLoader = new ImageLoader(queue, new BitmapCache());
             SingleRow temp=listarray.get(position);
-
-//                cursor.moveToFirst();
-//                while (!cursor.isAfterLast()) {
 
                     holder.networkImageView.setImageUrl(temp.img, imageLoader);
                     holder.networkImageView.setDefaultImageResId(R.drawable.apple_128);//預設圖一樣可以用 0 表示不預設
@@ -292,10 +289,6 @@ public class Favorite extends Fragment implements View.OnClickListener, ListView
                     holder.txtname.setText(temp.title);
                     holder.txtengName.setText(temp.subtitle);
                     holder.time.setText(temp.timestamp);
-
-
-//                    cursor.moveToNext();
-//                }
 
             return convertView;
         }

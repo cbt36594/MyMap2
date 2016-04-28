@@ -2,12 +2,11 @@ package com.tab.tw.mymap2;
 
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -17,28 +16,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
-
-import com.google.android.gms.maps.GoogleMap;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 
 public class MapsActivity extends FragmentActivity {
@@ -46,7 +35,6 @@ public class MapsActivity extends FragmentActivity {
     private TabLayout tabLayout;
     private ListView mList;
     private ArrayAdapter<String> listAdapter;
-    private GoogleMap mGoogleMap;
     private ProgressDialog progressDialog;
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
     private Toolbar toolbar;
@@ -88,7 +76,7 @@ public class MapsActivity extends FragmentActivity {
         //檢查網路連線true=連線成功~方法在最後
         if (checkInternetConnection()) {
 
-            Toast.makeText(this, "連線成功", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.connect_success, Toast.LENGTH_SHORT).show();
 
         } else {
 
@@ -114,7 +102,7 @@ public class MapsActivity extends FragmentActivity {
             });
             connect.start();
 
-            Toast.makeText(this, "請確認網路連線..", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.confirm_connect, Toast.LENGTH_SHORT).show();
         }
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -129,11 +117,36 @@ public class MapsActivity extends FragmentActivity {
     //主頁面的左邊導航欄ListView設定
     public void drawerList()
     {
+        mLinear = (LinearLayout)findViewById(R.id.drawer_linear);
         mList =(ListView)findViewById(R.id.main_left_drawer);
         String [] getList = getResources().getStringArray(R.array.list_name);
         listAdapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,getList);
+//        mList.setDivider(null);
+        mList.setOnItemClickListener(listItem);
         mList.setAdapter(listAdapter);
+
     }
+    LinearLayout mLinear;
+    AdapterView.OnItemClickListener listItem = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            mList.setItemChecked(position,true);
+//            Intent intent = new Intent();
+//            intent.setClass(MapsActivity.this, ListMessage.class);
+//            startActivity(intent);
+            switch (position)
+            {
+                case 0:
+                    Toast.makeText(MapsActivity.this,"0",Toast.LENGTH_SHORT).show();
+                    break;
+                case 1:
+                    Toast.makeText(MapsActivity.this,"1",Toast.LENGTH_SHORT).show();
+                    break;
+            }
+//            mDrawerLayout.closeDrawer(mLinear);
+        }
+    };
     //權限要求結果處理
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -145,7 +158,7 @@ public class MapsActivity extends FragmentActivity {
                     startActivity(refresh);
                 } else {
                     // Permission Denied
-                    Toast.makeText(MapsActivity.this, "未授權GPS", Toast.LENGTH_SHORT)
+                    Toast.makeText(MapsActivity.this, R.string.permissions_result_failed, Toast.LENGTH_SHORT)
                             .show();
                 }
                 break;
@@ -156,8 +169,7 @@ public class MapsActivity extends FragmentActivity {
 
     public class PagerAdapter extends FragmentPagerAdapter {
         int PAGER_COUNT;
-        FragmentManager mFragmentManager;
-        Map<Integer, String> mFragmentTags;
+
 
         public PagerAdapter(FragmentManager mFragmentManager, int PAGER_COUNT) {
             super(mFragmentManager);
@@ -171,7 +183,7 @@ public class MapsActivity extends FragmentActivity {
                     MapFragmentA Map = new MapFragmentA();
                     return Map;
                 case 1:
-                    listtest google = new listtest();
+                    Listtest google = new Listtest();
                     return google;
                 case 2:
                     TabFragment3 facebook = new TabFragment3();
@@ -198,14 +210,14 @@ public class MapsActivity extends FragmentActivity {
 //        toolbar.setLogo(R.mipmap.flag_icon96) ;
         toolbar.setTitle(R.string.title_activity_maps);
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                System.out.println("click Navigation ");
-            }
-        });
+//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//
+//                System.out.println("click Navigation ");
+//            }
+//        });
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -229,20 +241,45 @@ public class MapsActivity extends FragmentActivity {
     public void initDrawerLayout(){
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout2);
+        //讓DrawerToggle知道母體介面是誰
         mActionBarDrawerToggle = new ActionBarDrawerToggle(MapsActivity.this, mDrawerLayout, toolbar, R.string.open, R.string.close) {
+            //被打開後要做的事情
             @Override
             public void onDrawerOpened(View drawerView) {
+                toolbar.setTitle("選單測試");
                 super.onDrawerOpened(drawerView);
 
             }
             @Override
             public void onDrawerClosed(View drawerView) {
+                toolbar.setTitle(R.string.app_name);
                 super.onDrawerClosed(drawerView);
             }
         };
-        mActionBarDrawerToggle.syncState();
+//        mActionBarDrawerToggle.syncState();
+
         mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
 
+    }
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mActionBarDrawerToggle.syncState();//讓ActionBar中的返回箭號置換成Drawer 的三條線圖示。並且把這個觸發器指定給mDrawerLayout
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mActionBarDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (mActionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
     public void TabLayout() {
 
@@ -255,15 +292,15 @@ public class MapsActivity extends FragmentActivity {
 
     }
 
-
+    //檢查連線
     public boolean checkInternetConnection() {
         ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo ni = cm.getActiveNetworkInfo();
-        if (ni != null && ni.isConnected()) {
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnected()) {
 
-            return ni.isConnected();
+            return netInfo.isConnected();
         } else {
-//            System.out.println("ni.isConnected() = " + ni.isConnected());
+//            System.out.println("netInfo.isConnected() = " + netInfo.isConnected());
 
 
             return false;

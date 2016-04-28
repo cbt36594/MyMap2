@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.support.v7.widget.Toolbar;
 import android.util.LruCache;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.CookieManager;
@@ -53,7 +52,7 @@ public class ListMessage extends Activity {
     private int length;
     private JSONArray jsonArray;
     private Toolbar toolbar;
-    listtest list;
+    Listtest list;
     ImageView iv;
 
     @Override
@@ -71,7 +70,7 @@ public class ListMessage extends Activity {
         start_time = new ArrayList<String>();
         end_time = new ArrayList<String>();
         created = new ArrayList<String>();
-        list = new listtest();
+        list = new Listtest();
 //        iv = (ImageView)findViewById(R.id.thumbnail);
         txvtitle = (TextView)findViewById(R.id.title1);
         txvmsg = (TextView)findViewById(R.id.subcomment);

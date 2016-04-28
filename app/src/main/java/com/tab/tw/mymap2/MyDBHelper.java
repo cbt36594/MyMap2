@@ -62,6 +62,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
 
     public boolean delete(String rowId)
     {
-       return db.delete(_TableName, _ID + "=" + rowId, null) > 0;
+       db =  getWritableDatabase();
+       return db.delete(_TableName, _ID + "=" + rowId, null) >0;
     }
 }

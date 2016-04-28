@@ -1,29 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context="com.tab.tw.mymap2.MapsActivity">
+<!--<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:fitsSystemWindows="true"-->
+    <!--tools:context="com.tab.tw.mymap2.MapsActivity">-->
     <android.support.v4.widget.DrawerLayout
-
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/drawer_layout2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
-        <RelativeLayout
-            android:layout_width="240dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:choiceMode="singleChoice"
-            >
-            <!-- The navigation drawer -->
-            <ListView android:id="@+id/main_left_drawer"
-                android:layout_width="240dp"
-                android:layout_height="match_parent"
-                android:background="#2196F3"/>
-        </RelativeLayout>
+
 <LinearLayout
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -72,5 +61,37 @@
 
 </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:orientation="vertical"
+        android:id="@+id/drawer_linear"
+        android:fitsSystemWindows="true"
+        >
+        <LinearLayout
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="#000000"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#FFFFFF"
+                android:text="@string/drawer_title"
+                android:id="@+id/textView_drawer_title"
+                android:gravity="center" />
+        </LinearLayout>
+        <!-- The navigation drawer -->
+        <ListView android:id="@+id/main_left_drawer"
+            android:layout_width="240dp"
+            android:layout_height="0dp"
+            android:choiceMode="singleChoice"
+            android:layout_weight="1"
+            android:background="#2196F3"/>
+    </LinearLayout >
     </android.support.v4.widget.DrawerLayout>
-</android.support.design.widget.CoordinatorLayout>
+<!--</android.support.design.widget.CoordinatorLayout>-->
